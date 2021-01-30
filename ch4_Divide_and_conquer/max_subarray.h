@@ -3,34 +3,9 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #define INF 65535
 
-//暴力破解：Θ(n^2)
-void brute_max_subarray(std::vector<int>& arr,std::vector<int>& vec){
-    int len=arr.size();
-    if(!len)
-        return ;
-    int max=-INF;
-    int low=0,high=0;
-
-    for(int i=0;i!=len;++i){
-        int sum=0;
-        for(int j=i;j!=len;++j){
-            sum+=arr[j];
-            if(sum>max){
-                max=sum;
-                low=i;
-                high=j;
-            }
-        }
-    }
-
-    for(int i=low;i<=high;++i)
-        vec.push_back(arr[i]);
-}
-
-//贪心算法：如前面的和为负数，则从下一个重新开始
-//O(n)
 void greedy_max_subarray(std::vector<int>& arr,std::vector<int>& vec){
     int len=arr.size();
     if(!len)
@@ -57,8 +32,28 @@ void greedy_max_subarray(std::vector<int>& arr,std::vector<int>& vec){
         vec.push_back(arr[i]);
 }
 
-//分治递归：最大子数组只可能出现在左边，右边或跨中点
-//O(nlgn)
+void brute_max_subarray(std::vector<int>& arr,std::vector<int>& vec){
+    int len=arr.size();
+    if(!len)
+        return ;
+    int max=-INF;
+    int low=0,high=0;
+
+    for(int i=0;i!=len;++i){
+        int sum=0;
+        for(int j=i;j!=len;++j){
+            sum+=arr[j];
+            if(sum>max){
+                max=sum;
+                low=i;
+                high=j;
+            }
+        }
+    }
+
+    for(int i=low;i<=high;++i)
+        vec.push_back(arr[i]);
+}
 int find_max_crossing_subarray(std::vector<int>& vec,int low,int high,int mid){
     int left_sum=-INF;
     int sum=0;
@@ -99,4 +94,14 @@ int find_max_subarray(std::vector<int>& vec,int low,int high){
     }
 }
 
+int maxSubArray_dp(std::vector<int>& arr){
+    int len=arr.size();
+    std::vector<int> dp(len);
+    int maxAns=arr[0];
+    for(int i=1;i<len;++i){
+        dp[i]=std::max(dp[i-1]+arr[i],arr[i]);
+        maxAns=std::max(dp[i],maxAns);
+    }
+    return maxAns;
+}
 #endif //ITA_MAX_SUBARRAY_H

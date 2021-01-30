@@ -22,7 +22,7 @@ for j=2 to A.length
 	A[j+1]=Key 
 ```
 
-翻译成C++就是如下：
+翻译成C++如下：
 
 ```cpp
 template<typename T,typename Pred>
